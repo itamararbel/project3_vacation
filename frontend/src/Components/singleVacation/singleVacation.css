@@ -1,0 +1,65 @@
+.singleVacation {
+    text-align: center;
+    display: inline-block;
+    width: 27%;
+    min-width:250px;
+    margin:2%;
+    height: 380px;
+    border: 10px transparent groove;
+    background-color: rgb(240, 248, 255,0.6);	
+    border-radius: 30px;   
+    
+}
+
+.singleVacation>*{
+    text-align: center;
+}
+
+.singleVacation:hover{
+   
+box-shadow: 0px 0px 100px orangered ;
+}
+.singleVacation>p{
+    margin: 0;
+}
+
+.singleVacation>img {
+    height: 40%;
+    border-radius: 10px;
+    max-width: 70%;
+    overflow: hidden;
+
+}
+
+.singleVacation>p{
+height: 20pt;
+margin-top: 0;
+padding-top: 0;
+margin-bottom: 30px;
+}
+
+
+.singleVacation>button{
+   float: right;
+   font-size: x-large   ;
+   border: none;
+   background-color: transparent;
+}
+
+.singleVacation>button:hover {
+    background-color: rgb(255, 69, 0,0.4);
+    box-shadow: 5px 5px 10px ;
+    border-radius: 200px;
+
+}
+.singleVacation>h1{
+    font-family: cursive ;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+@media only screen and (max-width: 700px) {
+    .singleVacation {
+     width: 80%;
+    }
+  }

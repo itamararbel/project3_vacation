@@ -1,0 +1,42 @@
+.header {
+   
+    background-color: darkcyan;
+    opacity: 0.9;	
+    margin:20px;
+    border-radius: 200px;
+
+}
+
+.header>h1 {
+    background-color: darkslategray;
+    padding :50px;
+    color: aliceblue;
+    box-shadow: 0 30px 40px rgba(47,79,79,0.9);
+    border-radius: 200px;
+    bottom: 0;
+    font-family: cursive;
+
+}
+
+.links{
+    font-size: xx-large;
+    text-decoration: none;
+    bottom: 0;
+    /* border: solid black 1px; */
+    height: 30px;
+    margin-left:10% ;
+    margin-right: 10%;
+    color: #ff4500;
+}
+
+.links:hover {
+     text-shadow: 1px 1px 1px black;
+}
+
+.login{
+    position: absolute;
+    top:20px;
+    right:20px;
+    background-color: black;
+}
+

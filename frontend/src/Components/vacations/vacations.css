@@ -1,0 +1,20 @@
+.vacations {
+    width: 100%;
+    /* display: inline-flex; */
+    /* flex-direction: row; */
+    /* border: 1px black solid; */
+   justify-content: space-evenly;	
+}
+ 
+.filters {
+    display: flex;
+    background-color: aliceblue;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    
+    /* width: 100%; */
+}
+.filters>*{
+   
+    margin-top: auto;
+}
