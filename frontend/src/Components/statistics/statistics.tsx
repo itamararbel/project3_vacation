@@ -5,6 +5,7 @@ import axios from "axios";
 import { store } from "../../redux/store";
 import { UserRole } from "../../redux/userAuthentication";
 import { useNavigate } from "react-router-dom";
+import serverUrl from "../../urls";
 
 
 function Statistics(): JSX.Element {
@@ -20,7 +21,7 @@ function Statistics(): JSX.Element {
         if (store.getState().authState.user_role !== UserRole.admin) {
             navigate("/")
         }
-        axios.get("http://localhost:3002/api/vacations/followStatistics", {
+        axios.get(serverUrl.ServerUrl+"vacations/followStatistics", {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem("userToken")}`
             }

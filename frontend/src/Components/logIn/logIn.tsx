@@ -10,6 +10,7 @@ import { store } from "../../redux/store";
 import { logInUser } from "../../redux/userAuthentication";
 import { userState } from "../../redux/userAuthentication";
 import { decodeToken } from "react-jwt";
+import serverUrl from "../../urls";
 
 interface closeProp {
     setOpen: (params: boolean) => void;
@@ -35,7 +36,7 @@ function LogIn({ setOpen }: closeProp): JSX.Element {
 
 
     const check = (user: any) => {
-        axios.post("http://localhost:3002/api/auth/log/", user, {
+        axios.post(serverUrl.ServerUrl+"auth/log/", user, {
             headers: {
                 "allow": "authorization"
             }

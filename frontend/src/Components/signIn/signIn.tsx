@@ -9,6 +9,7 @@ import "./signIn.css";
 import axios from "axios";
 import { logInUser, userState } from "../../redux/userAuthentication";
 import { store } from "../../redux/store";
+import serverUrl from "../../urls";
 
 interface closeProp {
     setOpen: (params: boolean) => void;
@@ -23,7 +24,7 @@ function SignIn({ setOpen }: closeProp): JSX.Element {
 
 
     const check = (user: any) => {       
-            axios.post("http://localhost:3002/api/auth/add", user).then(response => {
+            axios.post(serverUrl.ServerUrl+"auth/add", user).then(response => {
                     alert(`welcome ${response.data.first_name} your id is ${response.data.user_id}`)
                     let userLogged  = new userState()
                     userLogged.user_name = response.data.user_name;

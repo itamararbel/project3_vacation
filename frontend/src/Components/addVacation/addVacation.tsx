@@ -10,6 +10,7 @@ import axios from "axios";
 import { store } from "../../redux/store";
 import { UserRole, logInUser } from "../../redux/userAuthentication";
 import { useNavigate, useParams } from "react-router-dom";
+import serverUrl from "../../urls";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -44,7 +45,7 @@ function AddVacation(): JSX.Element {
 
     useEffect(() => {
         if (params.id) {
-            axios.get("http://localhost:3002/api/vacations/id/" + id).then((response) => {
+            axios.get(serverUrl.ServerUrl+"vacations/id/" + id).then((response) => {
                 const vacation: vacationModal = response.data[0];
                 setValue("description", vacation.description);
                 setValue("destination", vacation.destination);
@@ -53,7 +54,8 @@ function AddVacation(): JSX.Element {
                 setValue("end_date", vacation.end_date.split("T")[0]);
                 setStartDate(vacation.start_date.split("T")[0])
                 setEndDate(vacation.end_date.split("T")[0])
-                setPic("http://localhost:3002/images/" + vacation.picture)
+                setPic(vacation.picture)
+                console.log(vacation.picture)
             })
         }
     }, []);
@@ -69,7 +71,7 @@ function AddVacation(): JSX.Element {
             vacation.end_date = end_date;
 
             if (!params.id) {
-                axios.post("http://localhost:3002/api/vacations/add", vacation,{ 
+                axios.post(serverUrl.ServerUrl+ "vacations/add", vacation,{ 
                 headers: {
                     'Authorization': `Bearer ${store.getState().authState.user_token}`,
                     "content-type": "multipart/form-data"
@@ -84,7 +86,7 @@ function AddVacation(): JSX.Element {
                 }).catch((err) => { console.log(err) })
             } else {
                 vacation.vacation_id = params && Number(params.id);
-                axios.put("http://localhost:3002/api/vacations/edit", vacation, {
+                axios.put(serverUrl.ServerUrl+ "vacations/edit", vacation, {
                     headers: {
                         'Authorization': `Bearer ${store.getState().authState.user_token}`,
                         "content-type": "multipart/form-data"
@@ -183,7 +185,7 @@ function AddVacation(): JSX.Element {
                     variant="standard"
                     helperText={errors.description && errors.description.message}
                 />
-                {params.id && <img src={pic} alt="there where no pic"></img>}
+                {pic && <img src={`http://localhost:8082/images/`+pic} alt="there where no pic"></img>}
                 <Button
                     variant="contained"
                     component="label"

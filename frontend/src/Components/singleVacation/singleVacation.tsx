@@ -6,6 +6,7 @@ import { UserRole } from "../../redux/userAuthentication";
 import "./singleVacation.css";
 import { useNavigate } from "react-router-dom";
 import { Box, Modal, Typography } from "@mui/material";
+import serverUrl from "../../urls";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -57,7 +58,7 @@ function SingleVacation(item: singleVacation): JSX.Element {
                 user_name: store.getState().authState.user_name,
             }
             if (!isFollowed) {
-                axios.post("http://localhost:3002/api/users/follow/", dbFollow,
+                axios.post(serverUrl.ServerUrl+"users/follow/", dbFollow,
                     {
                         headers: {
                             'authorization': `Bearer ${localStorage.getItem("userToken")}`
@@ -71,7 +72,7 @@ function SingleVacation(item: singleVacation): JSX.Element {
                         }
                     }).catch(err => console.log(err))
             } else {
-                axios.delete("http://localhost:3002/api/users/follow/" + dbFollow.vacation_id + "/" + dbFollow.user_id, {
+                axios.delete(serverUrl.ServerUrl+"users/follow/" + dbFollow.vacation_id + "/" + dbFollow.user_id, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem("userToken")}`
                     }

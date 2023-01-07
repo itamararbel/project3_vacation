@@ -10,6 +10,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { logInUser, userState } from "../../redux/userAuthentication";
 import { decodeToken } from "react-jwt";
+import serverUrl from "../../urls";
 
 function Vacations(): JSX.Element {
     enum sorting { "Date", "price", "destination" }
@@ -20,24 +21,21 @@ function Vacations(): JSX.Element {
     const [dbVacations, setDbVacations] = useState<vacationModal[]>([]);
 
     const getAllVacations = (user: number) => {
-        console.log("fdsafd")
-        axios.get("http://localhost:3002/api/vacations/all/" + user).then((response) => {
-            console.log("after")
-        setDbVacations(response.data)
+        axios.get(serverUrl.ServerUrl+ "vacations/all/"+user).then((response) => {
+            setDbVacations(response.data)
             setVacationsArr(response.data)
-            console.log(store.getState().authState)
+            console.log(user)
+            console.log(response.data)
         })
     }
 
     useEffect(() => {
         if (localStorage.getItem("userToken") && !store.getState().authState.user_token) {
-            axios.post("http://localhost:3002/api/auth/checkIsLog", "void" ,{
+            axios.post(serverUrl.ServerUrl+ "auth/checkIsLog", "void", {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem("userToken")}`
                 }
             }).then((response) => {
-                console.log(response);
-
                 if (response.headers.authorization) {
                     const userLogged: userState = (decodeToken(response.headers.authorization.split(" ")[1]) as any).user
                     userLogged.user_token = response.headers.authorization.split(" ")[1];
@@ -45,9 +43,11 @@ function Vacations(): JSX.Element {
                     console.log(userLogged)
                     userLogged && store.dispatch(logInUser(userLogged));
                     getAllVacations(userLogged.user_id)
+                } else {
+                    getAllVacations(user)
                 }
             })
-            } else  {
+        } else {
             getAllVacations(user)
         }
     }, [user]);
@@ -57,7 +57,7 @@ function Vacations(): JSX.Element {
     });
 
     const handleDelete = (id: number) => {
-        axios.delete("http://localhost:3002/api/vacations/" + id, {
+        axios.delete(serverUrl.ServerUrl+"vacations/" + id, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem("userToken")}`
             }
@@ -111,7 +111,7 @@ function Vacations(): JSX.Element {
             <div className="filters">
                 <FormControlLabel
                     control={<Switch
-                    onChange={filterFollowed}
+                        onChange={filterFollowed}
                     />}
                     labelPlacement="start"
                     label={"show only followed vacations?"}
@@ -144,13 +144,13 @@ function Vacations(): JSX.Element {
                 </div>
             </div>
             <br></br>
-            {vacationsArr.slice((newPage * 10), newPage * 10 + 10).map((item) => 
-            <SingleVacation key={item.vacation_id} vacation_id={item.vacation_id} description={item.description} 
-             destination={item.destination} picture={item.picture.substring(0, 4) === "http" ?
-             item.picture : `http://localhost:3002/images/${item.picture}`} start_date={item.start_date} 
-             end_date={item.end_date} price={item.price} follow_num={item.follow_num} 
-             isFollowed={item.user_id !== null ? true : false} updateFollow={updateFollow} 
-             handleDelete={handleDelete} />)}
+            {vacationsArr.slice((newPage * 10), newPage * 10 + 10).map((item) =>
+                <SingleVacation key={item.vacation_id} vacation_id={item.vacation_id} description={item.description}
+                    destination={item.destination} picture={item.picture.substring(0, 4) === "http" ?
+                        item.picture : `http://localhost:8082/images/${item.picture}`} start_date={item.start_date}
+                    end_date={item.end_date} price={item.price} follow_num={item.follow_num}
+                    isFollowed={item.user_id !== null ? true : false} updateFollow={updateFollow}
+                    handleDelete={handleDelete} />)}
         </div>
     );
 }
