@@ -1,13 +1,16 @@
 .singleVacation {
     text-align: center;
     display: inline-block;
-    width: 27%;
+    width: 24%;
     min-width:250px;
     margin:2%;
     height: 380px;
     border: 10px transparent groove;
-    background-color: rgb(240, 248, 255,0.6);	
+    /* background-color: rgb(240, 248, 255,0.8);	 */
     border-radius: 30px;   
+    background-color: rgb(47, 79, 79,0.8);
+    color: white;	
+
     
 }
 
@@ -15,22 +18,28 @@
     text-align: center;
 }
 
+@keyframes example {
+    from {    background-color: darkslategrey    }
+    to {    background-color: rgb(112, 128, 144,0.6)     }
+  }
 .singleVacation:hover{
-   
-box-shadow: 0px 0px 100px orangered ;
+    animation-name: example;
+    animation-duration: 0.2s;
+    background-color:rgb(112, 128, 144,0.6)  
 }
 .singleVacation>p{
     margin: 0;
 }
 
 .singleVacation>img {
-    height: 40%;
+    max-height: 40%;
     border-radius: 10px;
-    max-width: 70%;
+    max-width: 100%;
     overflow: hidden;
 
+
 }
-.singleVacation>img:hover {
+/* .singleVacation>img:hover {
     left: 25%;
     top:20%;
     width:50%;
@@ -40,7 +49,7 @@ box-shadow: 0px 0px 100px orangered ;
     border-radius: 10px;
     overflow: hidden;
 
-}
+} */
 
 .singleVacation>p{
 height: 20pt;

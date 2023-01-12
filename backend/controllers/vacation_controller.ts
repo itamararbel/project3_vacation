@@ -7,6 +7,11 @@ import authLogic from "../logic/auth-logic";
 
 const vacationController = express.Router();
 
+vacationController.get("/test", async (request: Request, response: Response, next: NextFunction) => { 
+    response.status(200).json("test is working")
+})
+
+
 vacationController.get("/all/:id", async (request: Request, response: Response, next: NextFunction) => {
     const id = +request.params.id
     response.status(200).json(await logic_vacation.getAllVacations(id))
@@ -22,6 +27,7 @@ vacationController.get("/id/:id", async (request: Request, response: Response, n
 vacationController.post("/add", [authentication,isAdmin],async (request: Request, response: Response, next: NextFunction) => {
     const newVacation = request.body;
     newVacation.image = request.files.pic;
+    response.set("Authorization", await authLogic.relog(request.header("Authorization").split(" ")[1]));
     response.status(201).json(logic_vacation.addNewVacation(newVacation));
 }
 )
@@ -34,20 +40,15 @@ vacationController.delete("/:id", [authentication,isAdmin],async (request: Reque
 
 vacationController.put("/edit", [authentication,isAdmin],async (request: Request, response: Response, next: NextFunction) => {
     const body = request.body;
-    console.log("i am in")
     if (request.files) {
         body.image = request.files.pic;
     }
-    console.log("set")
-    console.log("controler " +request.header("Authorization").split(" ")[1])
-
     response.set("Authorization", await authLogic.relog(request.header("Authorization").split(" ")[1]));
     response.status(201).json(await logic_vacation.editVacation(body))
 }
 )
 
 vacationController.get("/followStatistics", [authentication,isAdmin],async (request: Request, response: Response, next: NextFunction) => {
-    console.log("controller")
     response.status(200).json(await logic_vacation.getFollowStatistics())
 })
 

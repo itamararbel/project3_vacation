@@ -1,0 +1,53 @@
+services:
+  sql-server-db:
+    container_name: sql-server-db
+    image: mysql
+    ports:
+      - "3300:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_USERNAME: "root"
+      MYSQL_ROOT_PASSWORD: "12345678"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - data:/data
+    networks:
+      - vacation-network
+  
+  backend:
+    container_name: vacation_backend
+    image: vacation_backend:1.0.0
+    build: 
+      context: backend
+      # target: production
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8082
+    restart: always
+    networks:
+      - vacation-network
+    depends_on:
+      - sql-server-db
+  
+  frontend:
+    container_name: vacation_frontend
+    image: vacation_frontend:1.0.0
+    build: 
+      context: frontend
+      # target: production
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    restart: always
+    networks:
+      - vacation-network
+    depends_on:
+      - backend
+
+volumes:
+  data: {}
+
+networks:
+  vacation-network:
+    driver: bridge
+  

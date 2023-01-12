@@ -59,7 +59,6 @@ function LogIn({ setOpen }: closeProp): JSX.Element {
 
     const handleClose = () => {
         setMsg("");
-
     }
 
     return (

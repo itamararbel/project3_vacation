@@ -1,38 +1,36 @@
 import express, { NextFunction, Request, Response } from "express";
 import authLogic from "../logic/auth-logic";
 import jwtHundler from "../util/jwtHundler";
-import { appendFileSync } from "fs";
+import logger from "../util/errorsLogger";
+import { authentication } from "../middleWere/authentication";
 
 const authController = express.Router();
 
+authController.get("/test", async (request: Request, response: Response, next: NextFunction) => { 
+    response.status(200).json("test is working")
+})
 
 authController.post("/log", async (request: Request, response: Response, next: NextFunction) => {
     const userCreds = (request.body);
     try {
         const token = await authLogic.checkCredentials(userCreds);
-        console.log(token)
-        // response.set("Access-Control-Expose-Headers: Authorization ")
         response.set('Authorization',`Bearer ${token}`);
-        response.status(200).send("fre");
+        response.status(200).send("welcome");
     }catch(err){
-        console.log(err.massage);
-        appendFileSync("errorsLog.txt", err.massage,"utf-8");   
+       logger.error(err.message)   
         next(err)
     }
 
     }    
 )
-
-authController.post("/checkIsLog", async (request: Request, response: Response, next: NextFunction) => {
+authController.post("/checkIsLog", authentication ,async (request: Request, response: Response, next: NextFunction) => {
     const authorization = await request.header("authorization").split(" ")[1]; 
-    console.log("authorization", authorization)
     if(jwtHundler.checkToken(authorization)){
         try {
-            console.log("checked")
             response.set("authorization", "Bearer "+await authLogic.relog(authorization));
             response.status(204).json();
         }catch(err){
-            appendFileSync("errorsLog.txt", err.massage,"utf-8");   
+            logger.error(err.message);
             next(err)
         }    
     } else {
@@ -45,14 +43,14 @@ authController.post("/add", async (request: Request, response: Response, next: N
     const body = request.body;
     let resp: string;
     try {
-        resp = await authLogic.addNewUsers(body)
+        resp = await authLogic.addNewUsers(body,next)
+        response.set("authorization", resp)
+     response.status(201).json(resp)
     }
-    catch (error) {
-        appendFileSync("errorsLog.txt", error.massage,"utf-8");   
-        next(error);
+    catch (err) {
+        logger.error(err.message)   
+        next(err);
     }
-    response.set("authorization", resp)
-    response.status(201)
 }
 )
 

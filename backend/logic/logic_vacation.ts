@@ -3,19 +3,20 @@ import dal from "../dal/dal"
 import vacationModal from "../modal/vicationModal"
 import { v4 as uuid } from "uuid"
 import { validationErr } from "../modal/client_error"
-import { appendFileSync, unlink } from "fs"
+import { unlink } from "fs"
+import logger from "../util/errorsLogger"
 
 
 
 const getAllVacations = async (id: number): Promise<vacationModal[]> => {
     const sql = `SELECT vacation_table.*, user_vacations.user_id
                 from(SELECT * from follow_table where user_id =${id}) as user_vacations
-                right join vacation_table on vacation_table.vacation_id = user_vacations.vacation_id`
+                right join vacation_table on vacation_table.vacation_id = user_vacations.vacation_id
+                order by start_date asc`
     return await dal.execute(sql)
 }
 
 const getById = async (id: number): Promise<vacationModal[]> => {
-    console.log("getById")
     const sql = "select * from vacation_Table WHERE vacation_id =" + id;
     return await dal.execute(sql)
 }
@@ -33,7 +34,7 @@ const addNewVacation = async (newVacation: vacationModal): Promise<vacationModal
     try {
         result = await dal.execute(sql);
     } catch (err) {
-        appendFileSync("errorsLog.txt", err.message,"utf-8");   
+        logger.error(err.message)
         throw new validationErr("sql is not good enough" + sql)
     }
     newVacation.vacation_id = result.insertId;
@@ -51,9 +52,7 @@ const deleteVacation = async (id: number): Promise<void> => {
 
 const editVacation = async (newVacation: vacationModal): Promise<vacationModal> => {
     if (newVacation.image) {
-        console.log(newVacation.image)
         const oldPic = await dal.execute("SELECT picture FROM vacation_table where vacation_id=" + newVacation.vacation_id)
-        console.log(oldPic[0].picture);
         await newVacation.image.mv("./src/assets/images/" + oldPic[0].picture)
     }
     const sql = `update vacation_table set destination ='${newVacation.destination}', description='${newVacation.description}', price = ${newVacation.price},start_date='${newVacation.start_date}',end_date='${newVacation.end_date}' where vacation_id=${newVacation.vacation_id} `

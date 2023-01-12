@@ -70,7 +70,7 @@ function SingleVacation(item: singleVacation): JSX.Element {
                         if (response.status === 200) {
                             setIsFollowed(!isFollowed)
                         }
-                    }).catch(err => console.log(err))
+                    }).catch(err => setOpen("you need to log in again"))
             } else {
                 axios.delete(serverUrl.ServerUrl+"users/follow/" + dbFollow.vacation_id + "/" + dbFollow.user_id, {
                     headers: {
@@ -83,7 +83,7 @@ function SingleVacation(item: singleVacation): JSX.Element {
                     if (response.status === 204) {
                         setIsFollowed(!isFollowed)
                     }
-                }).catch(err => console.log(err))
+                }).catch(err => setOpen("you need to log in again"))
             }
             item.updateFollow(item.vacation_id, isFollowed)
         }

@@ -24,8 +24,6 @@ function Vacations(): JSX.Element {
         axios.get(serverUrl.ServerUrl+ "vacations/all/"+user).then((response) => {
             setDbVacations(response.data)
             setVacationsArr(response.data)
-            console.log(user)
-            console.log(response.data)
         })
     }
 
@@ -40,13 +38,11 @@ function Vacations(): JSX.Element {
                     const userLogged: userState = (decodeToken(response.headers.authorization.split(" ")[1]) as any).user
                     userLogged.user_token = response.headers.authorization.split(" ")[1];
                     localStorage.setItem("userToken", userLogged.user_token)
-                    console.log(userLogged)
                     userLogged && store.dispatch(logInUser(userLogged));
                     getAllVacations(userLogged.user_id)
-                } else {
-                    getAllVacations(user)
                 }
-            })
+           
+            }).catch(()=>getAllVacations(0))
         } else {
             getAllVacations(user)
         }
@@ -66,7 +62,7 @@ function Vacations(): JSX.Element {
                 localStorage.setItem("userToken", response.headers.authorization)
             }
             if (response.status === 204) {
-                let newArr = dbVacations.filter(item => item.vacation_id !== id)
+                const newArr = dbVacations.filter(item => item.vacation_id !== id)
                 setVacationsArr(newArr);
             }
         })
@@ -147,7 +143,7 @@ function Vacations(): JSX.Element {
             {vacationsArr.slice((newPage * 10), newPage * 10 + 10).map((item) =>
                 <SingleVacation key={item.vacation_id} vacation_id={item.vacation_id} description={item.description}
                     destination={item.destination} picture={item.picture.substring(0, 4) === "http" ?
-                        item.picture : `http://localhost:8082/images/${item.picture}`} start_date={item.start_date}
+                        item.picture : `${serverUrl.pictureUrl}${item.picture}`} start_date={item.start_date}
                     end_date={item.end_date} price={item.price} follow_num={item.follow_num}
                     isFollowed={item.user_id !== null ? true : false} updateFollow={updateFollow}
                     handleDelete={handleDelete} />)}

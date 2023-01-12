@@ -1,9 +1,8 @@
-import { appendFileSync } from 'fs';
-
 import { followModal, UserAuthentic } from './../modal/userModal';
 import dal from "../dal/dal"
 import userModal  from "../modal/userModal"
 import jwtHundler from '../util/jwtHundler';
+import logger from '../util/errorsLogger';
 
 
 const getAllUsers = async():Promise<userModal[]>=>{
@@ -22,14 +21,11 @@ const deleteUsers = async(id:number):Promise<void>=>{
 }
 
 const addFollow = async(follow:followModal):Promise<string>=>{
-    console.log("entering addFollow")
     const sql = `insert into follow_table VALUES (${follow.user_id}, ${follow.vacation_id})`
     try{
     dal.execute(sql);
-    console.log("sql")
 }catch(err){
-    console.log(err);
-    appendFileSync("errorsLog.txt", err.message,"utf-8");   
+    logger.error(err.message)
 }
     return jwtHundler.createToken(new UserAuthentic(follow.user_name, follow.user_id,"" ,follow.user_role))
 }

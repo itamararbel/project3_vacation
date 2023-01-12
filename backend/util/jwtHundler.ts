@@ -5,7 +5,7 @@ const secretKey = "youwillneverseeitcoming";
 
 const createToken = (user: UserAuthentic): string => {
     const payload = { user };
-    const token = jwt.sign(payload, secretKey, { expiresIn: "30m" });
+    const token = jwt.sign(payload, secretKey, { expiresIn: "20m" });
     return token
 }
 

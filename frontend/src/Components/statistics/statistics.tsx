@@ -29,7 +29,6 @@ function Statistics(): JSX.Element {
             if (response.headers.authorization) {
                 localStorage.setItem("userToken", response.headers.authorization)
             }
-            console.log(response.data);
             const sortedData = response.data.sort((a:any,b:any) => a.numberOfFollowers > b.numberOfFollowers? -1:a.numberOfFollowers<b.numberOfFollowers?1 :0)
             setChartData(sortedData)
         })

@@ -1,0 +1,56 @@
+info	2023-01-11T13:35:48.047Z	user name exists: HERTZEL
+error	2023-01-11T13:35:48.060Z	undefined
+error	2023-01-11T13:42:42.980Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:42:51.725Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:43:38.160Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:44:43.420Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:45:01.712Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:45:09.969Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:45:28.570Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:46:51.285Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:47:19.008Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:47:42.265Z	undefined
+error	2023-01-11T13:47:55.892Z	undefined
+error	2023-01-11T13:49:14.638Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:52:12.797Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:54:14.673Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T13:55:03.801Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T21:15:30.206Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T21:15:49.703Z	Cannot read properties of null (reading 'user')
+error	2023-01-11T21:44:05.478Z	undefined
+error	2023-01-11T21:58:13.349Z	undefined
+error	2023-01-12T13:23:47.682Z	undefined
+info	2023-01-12T13:35:38.733Z	user name exists: itamarArbel
+error	2023-01-12T13:35:38.767Z	undefined
+info	2023-01-12T13:35:55.080Z	user name exists: itamarArbel
+error	2023-01-12T13:35:55.080Z	undefined
+info	2023-01-12T13:35:58.664Z	user name exists: itamarArbel
+error	2023-01-12T13:35:58.666Z	undefined
+info	2023-01-12T13:39:09.267Z	user name exists: itamarArbel
+error	2023-01-12T13:39:09.273Z	undefined
+info	2023-01-12T13:47:30.817Z	user name exists: itamarArbel
+error	2023-01-12T13:47:30.823Z	Cannot read properties of undefined (reading 'insertId')
+info	2023-01-12T13:48:00.026Z	user name exists: itamarArbel
+error	2023-01-12T13:48:00.031Z	undefined
+info	2023-01-12T13:48:03.345Z	user name exists: itamarArbel
+error	2023-01-12T13:48:03.346Z	undefined
+info	2023-01-12T13:49:31.472Z	user name exists: itamarArbel
+error	2023-01-12T13:49:31.476Z	undefined
+info	2023-01-12T13:51:00.171Z	user name exists: itamarArbel
+error	2023-01-12T13:51:00.174Z	undefined
+info	2023-01-12T13:52:12.183Z	user name exists: itamarArbel
+error	2023-01-12T13:52:12.187Z	undefined
+info	2023-01-12T13:53:07.927Z	user name exists: itamarArbel
+error	2023-01-12T13:53:07.931Z	undefined
+info	2023-01-12T13:53:50.023Z	user name exists: itamarArbel
+error	2023-01-12T13:53:50.029Z	undefined
+info	2023-01-12T13:54:17.169Z	user name exists: itamarArbel
+error	2023-01-12T13:54:17.170Z	undefined
+info	2023-01-12T13:56:29.199Z	user name exists: itamarArbel
+error	2023-01-12T13:56:29.208Z	undefined
+info	2023-01-12T13:56:49.278Z	user name exists: itamarArbel
+error	2023-01-12T13:56:49.279Z	undefined
+info	2023-01-12T14:13:12.062Z	user name exists: itamarArbel
+error	2023-01-12T14:13:12.072Z	undefined
+info	2023-01-12T17:34:18.239Z	user name exists: itamarArbel
+error	2023-01-12T17:34:18.246Z	undefined

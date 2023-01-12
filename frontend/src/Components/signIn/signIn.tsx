@@ -1,4 +1,4 @@
-import { Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from "@mui/material";
+import { Alert, Button, Collapse, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from "@mui/material";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -10,35 +10,32 @@ import axios from "axios";
 import { logInUser, userState } from "../../redux/userAuthentication";
 import { store } from "../../redux/store";
 import serverUrl from "../../urls";
+import { decodeToken } from "react-jwt";
 
-interface closeProp {
-    setOpen: (params: boolean) => void;
-}
 
-function SignIn({ setOpen }: closeProp): JSX.Element {
+
+function SignIn(): JSX.Element {
     const { register, watch, handleSubmit, formState: { errors } } = useForm<userModal>()
-    const [showToggle, setToggle] = useState<Boolean>(false)
+    const [showToggle, setToggle] = useState<Boolean>(true)
+    const [userError, setError] = useState<string>("")
+
     const password = useRef({});
     password.current = watch("password", "");
     const navigate = useNavigate();
 
 
-    const check = (user: any) => {       
-            axios.post(serverUrl.ServerUrl+"auth/add", user).then(response => {
-                    alert(`welcome ${response.data.first_name} your id is ${response.data.user_id}`)
-                    let userLogged  = new userState()
-                    userLogged.user_name = response.data.user_name;
-                    userLogged.user_role = response.data.user_role;
-                    userLogged.user_id =response.data.user_id;
-                    if (response.headers.authorization) {
-                        userLogged.user_token = response.headers.authorization;
-                        localStorage.setItem("userToken", response.headers.authorization)
-                    }
-                    store.dispatch(logInUser(userLogged))
-                    navigate("/")
-                    setOpen(false)
-            }).catch(error => {alert(error.response.data)})
-        
+    const check = (user: any) => {
+        axios.post(serverUrl.ServerUrl + "auth/add", user).then(response => {
+            if (response.headers.authorization) {
+                const userLogged: userState = (decodeToken(response.headers.authorization) as any).user
+                userLogged.user_token = response.headers.authorization;
+                localStorage.setItem("userToken", userLogged.user_token)
+                userLogged && store.dispatch(logInUser(userLogged));
+            }
+            navigate("/greeting")
+        }).catch(error => {
+            setError(error.response.data)
+        })
     }
     return (
         <div className="signIn">
@@ -74,7 +71,6 @@ function SignIn({ setOpen }: closeProp): JSX.Element {
                                 </InputAdornment>
                             }
                         />                </FormControl>
-
                     {errors.password && <p>{errors.password.message}</p>}
                     <FormControl fullWidth>
                         <InputLabel htmlFor="standard-adornment-password">can u repeat the password plz?</InputLabel>
@@ -91,6 +87,9 @@ function SignIn({ setOpen }: closeProp): JSX.Element {
                     </FormControl>
                     {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
                     <br /><br></br>
+                    <Collapse in={!userError ? false : true}>
+                        <Alert severity="error" hidden={true} >{userError}</Alert>
+                    </Collapse>
                     <Button variant="contained" fullWidth color="secondary" type="submit">signIn</Button>
                 </form>
             </DialogContent>

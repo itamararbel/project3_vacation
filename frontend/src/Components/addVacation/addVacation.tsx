@@ -33,27 +33,20 @@ function AddVacation(): JSX.Element {
     const params = useParams();
     const [pic, setPic] = useState<any>();
     const [open, setOpen] = useState<string>("");
-
     const handleClose = () => setOpen("");
-
-
+    const id = params.id;
     if (store.getState().authState.user_role !== UserRole.admin) {
         navigate("/")
     }
-    const id = params.id;
-
-
     useEffect(() => {
         if (params.id) {
-            axios.get(serverUrl.ServerUrl+"vacations/id/" + id).then((response) => {
+            axios.get(serverUrl.ServerUrl + "vacations/id/" + id).then((response) => {
                 const vacation: vacationModal = response.data[0];
                 setValue("description", vacation.description);
                 setValue("destination", vacation.destination);
                 setValue("price", vacation.price);
-                setValue("start_date", vacation.start_date.split("T")[0]);
-                setValue("end_date", vacation.end_date.split("T")[0]);
-                setStartDate(vacation.start_date.split("T")[0])
-                setEndDate(vacation.end_date.split("T")[0])
+                setStartDate((vacation.start_date.split("T")[0]))
+                setEndDate((vacation.end_date.split("T")[0]))
                 setPic(vacation.picture)
                 console.log(vacation.picture)
             })
@@ -63,50 +56,47 @@ function AddVacation(): JSX.Element {
     const send = (vacation: vacationModal) => {
         if (!pic || !start_date || !end_date) {
             setOpen("you forgot to add a picture, start date and/or end date")
-        } else if (start_date >= end_date) {
-            setOpen("you must leave before you come back")
-        } else {
+        } else if (new Date(start_date) >= new Date(end_date)) {
+            setOpen("your vacation must be longer then a day")
+        }
+        else {
             vacation.pic = pic;
             vacation.start_date = start_date;
             vacation.end_date = end_date;
-
             if (!params.id) {
-                axios.post(serverUrl.ServerUrl+ "vacations/add", vacation,{ 
-                headers: {
-                    'Authorization': `Bearer ${store.getState().authState.user_token}`,
-                    "content-type": "multipart/form-data"
-                }}).then((response) => {
-                    if (response.headers.authorization) {
-                        localStorage.setItem("userToken", response.headers.authorization)
-                        const newState = {...store.getState().authState}
-                        newState.user_token =  response.headers.authorization;
-                        store.dispatch(logInUser(newState))
-                    }
-                    navigate("/")
-                }).catch((err) => { console.log(err) })
-            } else {
-                vacation.vacation_id = params && Number(params.id);
-                axios.put(serverUrl.ServerUrl+ "vacations/edit", vacation, {
+                axios.post(serverUrl.ServerUrl + "vacations/add", vacation, {
                     headers: {
                         'Authorization': `Bearer ${store.getState().authState.user_token}`,
                         "content-type": "multipart/form-data"
                     }
-                    
                 }).then((response) => {
-                    console.log(response.headers.authorization);
                     if (response.headers.authorization) {
-                        localStorage.setItem("userToken", response.headers.authorization)
-                        const newState = {...store.getState().authState}
-                        newState.user_token =  response.headers.authorization;
-                        store.dispatch(logInUser(newState))
+                        changeToken(response.headers.authorization)
                     }
-                    navigate("/")
-                }).catch((err) => { console.log(err) })
+                }).catch((err) => { setOpen("sorry, couldn't edit a vacation") })
+            } else {
+                vacation.vacation_id = params && Number(params.id);
+                axios.put(serverUrl.ServerUrl + "vacations/edit", vacation, {
+                    headers: {
+                        'Authorization': `Bearer ${store.getState().authState.user_token}`,
+                        "content-type": "multipart/form-data"
+                    }
+                }).then((response) => {
+                    if (response.headers.authorization) {
+                        changeToken(response.headers.authorization)
+                    }
+                }).catch((err) => { setOpen("sorry, couldn't add a vacation") })
             }
         }
     }
-
-
+    const changeToken = (token: string) => {
+        localStorage.setItem("userToken", token)
+        console.log("some")
+        const newState = { ...store.getState().authState }
+        newState.user_token = token;
+        store.dispatch(logInUser(newState))
+        navigate("/")
+    }
     return (
         <div className="addVacation">
             <Modal
@@ -148,7 +138,6 @@ function AddVacation(): JSX.Element {
                         variant="standard"
                         {...register("price", { required: "u got to add price" })}
                         helperText={errors.price && errors.price.message}
-
                     />
                 </div>
                 <div>
@@ -158,7 +147,6 @@ function AddVacation(): JSX.Element {
                         adapterLocale='fr'>
                         <DatePicker
                             {...register("end_date", { required: "so... when do we return" })}
-
                             label="Pick start date"
                             value={start_date}
                             onChange={(date) => setStartDate((date.$y) + "-" + (date.$M + 1) + "-" + (date.$D))}
@@ -174,7 +162,6 @@ function AddVacation(): JSX.Element {
                             renderInput={(params) => <TextField {...params} />}
                         />
                         {errors.end_date && <p>{errors.end_date.message}</p>}
-
                     </LocalizationProvider>
                 </div>
                 <TextField
@@ -185,7 +172,7 @@ function AddVacation(): JSX.Element {
                     variant="standard"
                     helperText={errors.description && errors.description.message}
                 />
-                {pic && <img src={`http://localhost:8082/images/`+pic} alt="there where no pic"></img>}
+                {pic && <img src={`http://localhost:8082/images/` + pic} alt="there where no pic"></img>}
                 <Button
                     variant="contained"
                     component="label"
@@ -204,12 +191,8 @@ function AddVacation(): JSX.Element {
                 </Button >
                 <Button sx={{ m: 3, width: '75%' }} fullWidth color="secondary" variant="contained" type="submit"> submit</Button>
             </Box >
-
-
         </div >
-
     );
 }
-
 export default AddVacation;
 
