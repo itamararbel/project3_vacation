@@ -1,0 +1,1 @@
+ER_TABLEACCESS_DENIED_ERROR: CREATE command denied to user 'b8bce7a6148c34'@'ip-10-0-125-198.eu-west-1.compute.internal' for table 'vacation_table'
